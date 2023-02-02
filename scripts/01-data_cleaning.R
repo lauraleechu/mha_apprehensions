@@ -12,25 +12,76 @@
 
 
 #### Workspace setup ####
-# Use R Projects, not setwd().
-library(haven)
-library(tidyverse)
-# Read in the raw data. 
-raw_data <- readr::read_csv("inputs/data/raw_data.csv"
-                     )
-# Just keep some variables that may be of interest (change 
-# this depending on your interests)
-names(raw_data)
-
-reduced_data <- 
-  raw_data %>% 
-  select(first_col, 
-         second_col)
-rm(raw_data)
-         
-
-#### What's next? ####
+# Use R Projects
 
 
+# Renaming MHA Apprehension Types
+mental_health <-
+  mental_health |>
+  mutate(
+    ApprehensionType =
+      recode(
+        ApprehensionType,
+        "Mha Sec 15 (Form 1)" = "Sec. 15",
+        "Mha Sec 16 (Form 2)" = "Sec. 16",
+        "Mha Sec 17 (Power Of App)" = "Sec. 17",
+        "Mha Sec 28(1) (Form 9 Elopee)" = "Sec. 28(1)",
+        "Mha Sec 33.4 (Form 47 Cto)" = "Sec. 33.4"
+      )
+  )
+
+#cleaning data for number of apprehensions by MHA type over a few years
+first_apprehension <-
+  mental_health |>
+  select(ReportYear, ApprehensionType) |>
+  group_by(ApprehensionType) |>
+  count(ReportYear) 
+
+
+write.csv(
+  x = first_apprehension,
+  "/cloud/project/inputs/data/first_apprehension.csv")
+  
+  
+#Total apprehension by MHA type and gender cleaning data
+gender_apprehension <-
+  mental_health |>
+  select(Sex, ApprehensionType) |>
+  group_by(ApprehensionType) |>
+  count(Sex) 
+
+write.csv(
+  x = gender_apprehension,
+  "/cloud/project/inputs/data/gender_apprehension.csv")
+
+# cleaning data: creating base tables to merge (AgeGroup, Sex, ReportYear)
+secondtbl1 <-
+  tabyl(mental_health, AgeGroup, ReportYear) |>
+  adorn_totals(c("row", "col")) 
+
+secondtbl2 <-
+  tabyl(mental_health, Sex, ReportYear) |>
+  adorn_totals(c("row", "col"))
+
+#merge tables
+scndtbl <-
+  merge(secondtbl1, secondtbl2, all = TRUE) |>
+  select("AgeGroup", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") 
+
+scndtbl[9, "AgeGroup"] = "Female" #renaming column values
+scndtbl[10, "AgeGroup"] = "Male"
+
+
+  
+#Total apprehension by MHA type and Age Group cleaning
+age_apprehension <-
+  mental_health |>
+  select(AgeGroup, ApprehensionType) |>
+  group_by(ApprehensionType) |>
+  count(AgeGroup) 
+
+write.csv(
+  x = age_apprehension,
+  "/cloud/project/inputs/data/age_apprehension.csv")
 
          
