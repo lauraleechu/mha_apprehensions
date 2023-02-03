@@ -63,16 +63,33 @@ secondtbl2 <-
   tabyl(mental_health, Sex, ReportYear) |>
   adorn_totals(c("row", "col"))
 
-#merge tables
+
+write.csv(
+  x = secondtbl1,
+  "/cloud/project/inputs/data/secondtbl1.csv", row.names=FALSE)
+
+write.csv(
+  x = secondtbl2,
+  "/cloud/project/inputs/data/secondtbl2.csv", row.names=FALSE)
+
+library(knitr)
+library(janitor)
+library(opendatatoronto)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
 scndtbl <-
   merge(secondtbl1, secondtbl2, all = TRUE) |>
   select("AgeGroup", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") 
 
-scndtbl[9, "AgeGroup"] = "Female" #renaming column values
-scndtbl[10, "AgeGroup"] = "Male"
+
+write.csv(
+  x = scndtbl,
+  "/cloud/project/inputs/data/scndtbl.csv", row.names=FALSE)
 
 
-  
 #Total apprehension by MHA type and Age Group cleaning
 age_apprehension <-
   mental_health |>

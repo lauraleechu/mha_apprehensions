@@ -2,18 +2,206 @@
 title: "Mental Health Apprehensions in Toronto from 2014 to 2021"
 author: Laura Lee-Chu
 thanks: "Code and data are available at: LINK."
-date: "`r Sys.time()`"
-date-format: "2 February 2023"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "Considering data about mental health apprehensions in Toronto from 2014 to 2021."
 format: pdf
+editor: visual
+date: "`r Sys.time()`"
+date-format: "D MMMM YYYY"
 bibliography: references.bib
 ---
+This paper analyzed data obtained from [@citeopendata] and produced using [@citeR]. The data was examined and cleaned using [@janitor], [@dplyr], and [@tidyverse]. Tables were made with [@knitr] and [@kableExtra]. [@ggplot2] was used to plot graphs. 
+
+
+
+
+\pagebreak
+## Data
+
+
+
+
 
 ```{r}
-#tables and stuff
+#| messages: false
+#| echo: false
+#| warning: false
+#| fig-cap: "Table 1: Number of Apprehensions by MHA Apprehension Type from 2014 to 2021"
+#| label: table-1
 
+
+
+library(knitr)
+library(janitor)
+library(opendatatoronto)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
+options(kableExtra.auto_format = FALSE)
+
+# calling package
+mental_health <- read.csv(here::here("/cloud/project/inputs/data/mental_health.csv"))
+
+firsttabl <- tabyl(mental_health, ApprehensionType, ReportYear) |>
+  adorn_totals(c("row", "col")) |>
+  select("ApprehensionType", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") |>
+  knitr::kable(format = "latex", booktabs = T,
+    col.names = c("MHA Apprehension Types", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"), 
+    align = "l"
+  ) 
+  
+firsttabl |>
+  add_header_above(header = c(" " = 1, "Year" = 8)) |>
+  kable_minimal(html_font = "Cambria") 
 
 
 ```
+
+
+\pagebreak
+
+
+```{r}
+#| messages: false
+#| echo: false
+#| warning: false
+#| fig-cap: "Number of Mental Health Apprehensions from 2014 to 2021"
+#| label: fig-2
+
+
+# calling package
+first_apprehension <- read.csv(here::here("/cloud/project/inputs/data/first_apprehension.csv"))
+
+# first multiple graphs showing number of apprehensions by MHA type over a few years
+first_apprehension |>
+  filter(ReportYear < 2022) |>
+  ggplot(aes(x = ReportYear, y = n)) +
+  scale_y_continuous(breaks=seq(0, 15000, 2000)) + #adjust y axis scale
+  scale_x_continuous(breaks=seq(2014,2021,1)) + # To show all years in graph
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) +
+  geom_point(color = "mediumorchid", size = 1) +
+  geom_line(color = "mediumorchid") +
+  facet_wrap(~ ApprehensionType) +
+  labs(
+    x = "Year",
+    y = "Number of Apprehensions"
+  )
+
+```
+
+
+
+\pagebreak
+
+```{r}
+#| messages: false
+#| echo: false
+#| warning: false
+#| fig-cap: "Table 2: Number of Mental Health Apprehensions by Age Group and Sex"
+#| label: table-2
+
+library(knitr)
+library(janitor)
+library(opendatatoronto)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
+#calling package 
+secondtbl1 <- read.csv(here::here("/cloud/project/inputs/data/secondtbl1.csv"))
+
+secondtbl2 <- read.csv(here::here("/cloud/project/inputs/data/secondtbl2.csv"))
+
+scndtbl <- read.csv(here::here("/cloud/project/inputs/data/scndtbl.csv"))
+
+scndtbl[9, "AgeGroup"] = "Female" #renaming column values
+scndtbl[10, "AgeGroup"] = "Male"
+
+# Creating two-way table
+scndtbl |>
+  filter(!AgeGroup %in% c("Not Recorded", NA_character_)) |>
+  kable(booktabs = T,
+    col.names = c(" ", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"),
+    align = "l") |>
+  add_header_above(header = c(" " = 1, "Year" = 8), bold = TRUE) |>
+  pack_rows("Sex", start_row = 7, end_row = 8) |>
+  pack_rows("Age Group", start_row = 1, end_row = 6) |>
+  pack_rows("Count", start_row = 9, end_row = 9) |>
+  kable_minimal(html_font = "Cambria", full_width = T, font_size = 8) 
+  
+
+
+```
+
+
+
+\pagebreak
+
+```{r}
+#| messages: false
+#| echo: false
+#| warning: false
+#| fig-cap: "Number of Apprehensions by Sex and MHA Apprehension Types"
+#| label: fig-4
+
+#calling package 
+gender_apprehension <- read.csv(here::here("/cloud/project/inputs/data/gender_apprehension.csv"))
+
+#second graph by MHA type and gender
+gender_apprehension |>
+  filter(Sex != "Not Recorded") |> #getting rid of non recorded sex
+  ggplot(aes(x = ApprehensionType, y = n, fill = Sex)) +
+  scale_y_continuous(breaks=seq(0, 40000, 5000)) + #adjust y axis scale
+  theme_minimal() +
+  geom_col (position = "dodge") +
+  labs(
+    x = "MHA Types",
+    y = "Number of Apprehensions"
+  ) +
+  scale_fill_brewer(palette = "PuRd") 
+
+```
+
+
+```{r}
+#| messages: false
+#| echo: false
+#| warning: false
+#| fig-cap: "Number of Mental Health Apprehensions by Age Group and MHA Apprehension Types"
+#| label: fig-5
+
+#calling package 
+age_apprehension <- read.csv(here::here("/cloud/project/inputs/data/age_apprehension.csv"))
+
+# plotting bar graph for AgeGroup and Apprehension Type
+age_apprehension |>
+  filter(AgeGroup != "Not Recorded") |> #getting rid of non recorded ages
+  ggplot(aes(x = ApprehensionType, y = n, fill = AgeGroup)) +
+  scale_y_continuous(breaks=seq(0, 25000, 2500)) + #adjust y axis scale
+  theme_minimal() +
+  geom_col (position = "dodge") +
+  labs(
+    x = "MHA Types",
+    y = "Number of Apprehensions"
+  ) +
+  scale_fill_brewer(palette = "BuPu")
+
+
+```
+
+
+
+
+\pagebreak
+
+
+
+
+
+
+# References
 
 
