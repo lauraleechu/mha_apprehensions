@@ -12,7 +12,7 @@ bibliography: references.bib
 
 ---
 ```{r setup, include=FALSE}
-#document set up for knit to pdf
+#document set up using knitr package
 knitr::opts_chunk$set(echo=TRUE)
 
 ```
