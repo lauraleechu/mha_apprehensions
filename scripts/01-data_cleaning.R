@@ -1,18 +1,13 @@
 #### Preamble ####
-# Purpose: Clean the survey data downloaded from [...UPDATE ME!!!!!]
-# Author: Rohan Alexander [CHANGE THIS TO YOUR NAME!!!!]
-# Data: 3 January 2021
-# Contact: rohan.alexander@utoronto.ca [PROBABLY CHANGE THIS ALSO!!!!]
+# Purpose: Clean the survey data downloaded from Open Data Toronto
+# Author: Laura Lee-Chu
+# Date: 3 February 2023
+# Contact: laura.leechu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: 
-# - Need to have downloaded the ACS data and saved it to inputs/data
-# - Don't forget to gitignore it!
-# - Change these to yours
-# Any other information needed?
-
 
 #### Workspace setup ####
-# Use R Projects
+# Using R Projects
+# will call data to main quarto file using here 
 
 
 # Renaming MHA Apprehension Types
@@ -50,6 +45,7 @@ gender_apprehension <-
   group_by(ApprehensionType) |>
   count(Sex) 
 
+#export data frame to csv file 
 write.csv(
   x = gender_apprehension,
   "/cloud/project/inputs/data/gender_apprehension.csv")
@@ -63,28 +59,23 @@ secondtbl2 <-
   tabyl(mental_health, Sex, ReportYear) |>
   adorn_totals(c("row", "col"))
 
-
+#export data frame to csv file 
 write.csv(
   x = secondtbl1,
   "/cloud/project/inputs/data/secondtbl1.csv", row.names=FALSE)
 
+#export data frame to csv file 
 write.csv(
   x = secondtbl2,
   "/cloud/project/inputs/data/secondtbl2.csv", row.names=FALSE)
 
-library(knitr)
-library(janitor)
-library(opendatatoronto)
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(kableExtra)
 
+# Merging previous tables to create a two way table including three factors 
 scndtbl <-
   merge(secondtbl1, secondtbl2, all = TRUE) |>
   select("AgeGroup", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") 
 
-
+#export data frame to csv file 
 write.csv(
   x = scndtbl,
   "/cloud/project/inputs/data/scndtbl.csv", row.names=FALSE)
@@ -97,6 +88,7 @@ age_apprehension <-
   group_by(ApprehensionType) |>
   count(AgeGroup) 
 
+#export data frame to csv file 
 write.csv(
   x = age_apprehension,
   "/cloud/project/inputs/data/age_apprehension.csv")

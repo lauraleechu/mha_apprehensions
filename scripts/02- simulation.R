@@ -1,4 +1,4 @@
-# Create sample data 
+# Create sample data to perform tests 
 simulated_data <-
   tibble(
     # Use 1 through to 500 to represent number of apprehensions

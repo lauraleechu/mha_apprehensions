@@ -1,33 +1,55 @@
 ---
-title: "Mental Health Apprehensions in Toronto from 2014 to 2021"
+title: "Under the Mental Health Act, Police Apprehensions Have Soared "
+subtitle: "Analyzing Mental Health Apprehensions in Toronto from 2014 to 2021"
 author: Laura Lee-Chu
-thanks: "Code and data are available at: LINK."
-abstract: "Considering data about mental health apprehensions in Toronto from 2014 to 2021."
+thanks: "Code and data are available at: https://github.com/lauraleechu/mha_apprehensions"
+abstract: "This report discusses mental health apprehensions in Toronto using data from Open Data Toronto published by Toronto Police Services. The data shows an increase in apprehensions since 2014 with a steep incline from 2020 to 2021 within the context of COVID-19 and an inflated police budget "
 format: pdf
 editor: visual
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
 bibliography: references.bib
+
 ---
-This paper analyzed data obtained from [@citeopendata] and produced using [@citeR]. The data was examined and cleaned using [@janitor], [@dplyr], and [@tidyverse]. Tables were made with [@knitr] and [@kableExtra]. [@ggplot2] was used to plot graphs. 
+# 1. Introduction
+
+The uptick in crime and mental health disturbances across the City of Toronto has dramatically climbed in recent years. Mental health apprehensions have increased considerably since the beginning of the COVID-19 pandemic. Apprehensions are classified under the Ontario Mental Health Act (MHA), which sets out the powers and obligations of psychiatric facilities and outlines the powers of police officers to make orders for individuals to undergo psychiatric evaluation [@MHA]. The data shows that police are responsible for the majority of mental health apprehensions in Toronto. However, police are not trained in crisis care and have caused numerous deaths in attempts to de-escalate [@remove]. Despite this, the city has increased the Toronto Police Service (TPS) budget while mental health services have faced disruptions.
+
+Women and young adults have been disproportionately impacted by the pandemic and this is reflected in the rise of apprehensions in those groups. This paper will define the apprehension types under the MHA, discuss the number of mental health apprehensions in Toronto from 2014 to 2021, evaluate the role of police in context, and finally consider additional factors such as Sex and Age Group.
 
 
 
 
 \pagebreak
-## Data
 
 
+# 2. Data
+This paper analyzed data obtained from the Open Data Toronto portal [@citeopendata] and was produced using the R statistical programming language [@citeR]. here was used to reference file locations [@here]. The data was examined and cleaned using the packages janitor [@janitor], dplyr [@dplyr], and tidyverse [@tidyverse]. Tables were made knitr [@knitr] and formatted with kableExtra [@kableExtra]. ggplot2 [@ggplot2] was used to plot and scale the graphs.
+
+The selected data source presents statistical limitations. Each apprehension case was registered under a unique identification number. Therefore, individuals apprehended multiple times would be counted as separate cases. Additionally, the dataset does not include racial demographics, which limits the social discussion in context. The Toronto Police Service does not guarantee the accuracy, completeness, or timeliness of the data [@citeopendata]. Therefore, the analysis will not include apprehensions from 2022 onwards because the data set is incomplete. Furthermore, apprehensions without Sex or Age Group recordings will be excluded. This paper aims to discuss the ethical conflict of mental health apprehensions conducted by the City of Toronto and the TPS in particular.
 
 
+The following are the apprehension types pursuant to MHA sections:
 
+*	Section 15 (Form 1 - Physician - Application for Psychiatric Assessment)
+
+*	Section 16 (Form 2 – Justice of the Peace – Order for Examination)
+
+*	Section 17 (Police Officer’s Power of Apprehension)
+
+*	Section 28 (1) (Form 9 - Elopee - Order for Return)
+
+*	Section 33.4 (Form 47 - Community Treatment Order for Examination)
+
+While the overall number of mental health apprehensions shown in Table 1 has increased yearly, there was a 14.25% increase from 2020 to 2021, a drastic leap from the 4.83% increase from 2019 to 2020. To place the significant surge in situational context, the Coronavirus pandemic forced countries to impose restrictions. Toronto’s COVID-19 state of emergency was the longest for any major city in the world. The decline in mental health can be attributed to multiple stress factors resulting from prolonged social isolation, job loss, and changes in relationships. Fear of infection for oneself and loved ones, grief, and financial strain have also been cited as triggers for anxiety and depression [@WHO]. Additionally, restrictions disrupted existing mental health services and suicide prevention hotlines. 
+
+\pagebreak
 ```{r}
 #| messages: false
 #| echo: false
 #| warning: false
-#| fig-cap: "Table 1: Number of Apprehensions by MHA Apprehension Type from 2014 to 2021"
+#| tab-cap: "Table 1: Number of Apprehensions by MHA Apprehension Type from 2014 to 2021"
 #| label: table-1
-
 
 
 library(knitr)
@@ -38,28 +60,44 @@ library(dplyr)
 library(ggplot2)
 library(kableExtra)
 
-options(kableExtra.auto_format = FALSE)
 
 # calling package
 mental_health <- read.csv(here::here("/cloud/project/inputs/data/mental_health.csv"))
 
-firsttabl <- tabyl(mental_health, ApprehensionType, ReportYear) |>
-  adorn_totals(c("row", "col")) |>
-  select("ApprehensionType", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") |>
-  knitr::kable(format = "latex", booktabs = T,
+firsttabl <- tabyl(mental_health, ApprehensionType, ReportYear) |> #filtering only needed data
+  adorn_totals(c("row", "col")) |> #calculating totals of all selected values
+  select("ApprehensionType", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021") |> #selecting only years with completed data 
+  kable(booktabs = T, caption = "Number of Apprehensions by MHA Apprehension Type from 2014 to 2021",
     col.names = c("MHA Apprehension Types", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"), 
     align = "l"
-  ) 
+  ) #changing column names and aliging table data to the left
   
 firsttabl |>
-  add_header_above(header = c(" " = 1, "Year" = 8)) |>
-  kable_minimal(html_font = "Cambria") 
+  add_header_above(header = c(" " = 1, "Year" = 8)) |> #adding subheading in table to group columns
+  kable_classic(html_font = "Cambria") #changing table font
 
 
 ```
 
+As shown in Table 1, there were significantly more apprehensions under Section 17 in all recorded years. Under the Ontario Mental Health Act, Section 17 is defined as: 
 
-\pagebreak
+Where a police officer has reasonable and probable grounds to believe that a person is acting or has acted in a disorderly manner and has reasonable cause to believe that the person,
+
+(a) has threatened or attempted or is threatening or attempting to cause bodily harm to himself or herself;
+
+(b) has behaved or is behaving violently towards another person or has caused or is causing another person to fear bodily harm from him or her; or
+
+(c) has shown or is showing a lack of competence to care for himself or herself,
+and in addition the police officer is of the opinion that the person is apparently suffering from mental disorder of a nature or quality that likely will result in,
+
+(d) serious bodily harm to the person;
+
+(e) serious bodily harm to another person; or
+
+(f) serious physical impairment of the person,
+
+and that it would be dangerous to proceed under section 16, the police officer may take the person in custody to an appropriate place for examination by a physician. [@MHA]
+
 
 
 ```{r}
@@ -67,7 +105,7 @@ firsttabl |>
 #| echo: false
 #| warning: false
 #| fig-cap: "Number of Mental Health Apprehensions from 2014 to 2021"
-#| label: fig-2
+#| label: fig-1
 
 
 # calling package
@@ -91,15 +129,13 @@ first_apprehension |>
 
 ```
 
-
-
-\pagebreak
+Figure 1 visualizes how Section 17 accounts for the vast majority of increases in apprehensions over time while the other Sections have remained relatively stable. From 2020 to 2021, Section 15, 16, and 33.4 saw a 10.57%, 9.28% and 0.35% increase respectively, while Section 28(1) apprehensions declined by 28.18%. In comparison, Section 17 apprehensions increased by 16.32% from 2020 to 2021. While the pandemic has caused an overall mental health decline, the disproportionate increase in police apprehensions can be attributed to the City of Toronto’s significant Police budget, which was $1.13 billion in 2021, slightly over 25% of taxpayer dollars [@polbudget]. This amount is comparable to the tax dollars spent on public health, public transportation, the library, and children's services combined. In 2021, Toronto spent just under 3.1 million on police services per day [@polbudget].
 
 ```{r}
 #| messages: false
 #| echo: false
 #| warning: false
-#| fig-cap: "Table 2: Number of Mental Health Apprehensions by Age Group and Sex"
+#| tab-cap: "Table 2: Number of Mental Health Apprehensions by Age Group and Sex"
 #| label: table-2
 
 library(knitr)
@@ -122,30 +158,30 @@ scndtbl[10, "AgeGroup"] = "Male"
 
 # Creating two-way table
 scndtbl |>
-  filter(!AgeGroup %in% c("Not Recorded", NA_character_)) |>
-  kable(booktabs = T,
+  filter(!AgeGroup %in% c("Not Recorded", NA_character_)) |> #filterning not recorded data
+  kable(booktabs = T, caption = "Number of Mental Health Apprehensions by Age Group and Sex",
     col.names = c(" ", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"),
-    align = "l") |>
+    align = "l") |> #designing table
   add_header_above(header = c(" " = 1, "Year" = 8), bold = TRUE) |>
-  pack_rows("Sex", start_row = 7, end_row = 8) |>
+  pack_rows("Sex", start_row = 7, end_row = 8) |> #adding subheadings to group rows
   pack_rows("Age Group", start_row = 1, end_row = 6) |>
   pack_rows("Count", start_row = 9, end_row = 9) |>
-  kable_minimal(html_font = "Cambria", full_width = T, font_size = 8) 
+  kable_minimal(html_font = "Cambria", full_width = T, font_size = 8) #changing table width to fit page and adjusting font size
   
 
 
 ```
 
 
+In contrast, Toronto allocated $2 million to strengthen mental health support in the same year, less than the TPS’ daily budget [@TOmental]. According to the World Health Organization, women have been more severely impacted by COVID-19 than men [@WHO]. When looking at the number of apprehensions from 2014 to 2021 in Table 2, males have consistently been apprehended at a higher rate. In 2021, there were 32.14% more male apprehensions. However, from 2020 to 2021, female apprehensions increased by 18.31% compared to an 11.28% rise in male apprehensions. Across all MHA Sections, as seen in Figure 2, males have been apprehended at a higher rate, particularly because of Section 17. There is limited information on gender disparities in policing in Canada. However, according to data from the FBI’s Uniform Crime Reporting Program, women make up 44% of police-initiated contact but only 27% of arrests [@FBI].
 
-\pagebreak
 
 ```{r}
 #| messages: false
 #| echo: false
 #| warning: false
 #| fig-cap: "Number of Apprehensions by Sex and MHA Apprehension Types"
-#| label: fig-4
+#| label: fig-2
 
 #calling package 
 gender_apprehension <- read.csv(here::here("/cloud/project/inputs/data/gender_apprehension.csv"))
@@ -153,25 +189,26 @@ gender_apprehension <- read.csv(here::here("/cloud/project/inputs/data/gender_ap
 #second graph by MHA type and gender
 gender_apprehension |>
   filter(Sex != "Not Recorded") |> #getting rid of non recorded sex
-  ggplot(aes(x = ApprehensionType, y = n, fill = Sex)) +
+  ggplot(aes(x = ApprehensionType, y = n, fill = Sex)) + #setting values for table
   scale_y_continuous(breaks=seq(0, 40000, 5000)) + #adjust y axis scale
   theme_minimal() +
-  geom_col (position = "dodge") +
-  labs(
+  geom_col (position = "dodge") + #enabling muliple bars per x value with legend on the side
+  labs( #labeling values 
     x = "MHA Types",
     y = "Number of Apprehensions"
   ) +
-  scale_fill_brewer(palette = "PuRd") 
+  scale_fill_brewer(palette = "PuRd") #adding purple colour scheme
 
 ```
 
+\pagebreak
 
 ```{r}
 #| messages: false
 #| echo: false
 #| warning: false
 #| fig-cap: "Number of Mental Health Apprehensions by Age Group and MHA Apprehension Types"
-#| label: fig-5
+#| label: fig-3
 
 #calling package 
 age_apprehension <- read.csv(here::here("/cloud/project/inputs/data/age_apprehension.csv"))
@@ -179,20 +216,24 @@ age_apprehension <- read.csv(here::here("/cloud/project/inputs/data/age_apprehen
 # plotting bar graph for AgeGroup and Apprehension Type
 age_apprehension |>
   filter(AgeGroup != "Not Recorded") |> #getting rid of non recorded ages
-  ggplot(aes(x = ApprehensionType, y = n, fill = AgeGroup)) +
+  ggplot(aes(x = ApprehensionType, y = n, fill = AgeGroup)) + #setting plot values
   scale_y_continuous(breaks=seq(0, 25000, 2500)) + #adjust y axis scale
-  theme_minimal() +
-  geom_col (position = "dodge") +
-  labs(
+  theme_minimal() + #light background
+  geom_col (position = "dodge") + #enabling muliple bars per x value with legend on the side
+  labs( #labelling axis 
     x = "MHA Types",
     y = "Number of Apprehensions"
   ) +
-  scale_fill_brewer(palette = "BuPu")
+  scale_fill_brewer(palette = "BuPu") #setting colour purple colour palette
 
 
 ```
 
 
+When considering the ages of apprehended individuals, those 25 to 34 outnumbered all other age groups from 2014 to 2021 as seen in Table 2. However, when breaking down the numbers by MHA Sections, those aged 25 to 34 were on par with individuals aged 65+ in Section 15: Application of psychiatric assessment as seen in Figure 3. Across all other MHA Sections, numbers peaked at the 25 to 34 age group and gradually declined to 65+. According to Statistics Canada, higher proportions of young adults screened positive for anxiety and depression between the fall of 2020 and the spring of 2021. Among adults aged 25 to 44, major depressive disorder increased from 18% to 23% and generalized anxiety disorder increased from 15% to 20% in the aforementioned period. Proportions of positive screens were higher for younger age groups relative to older groups [@statscan].
+
+
+While Toronto has seen a rise in mental health apprehensions since 2014, the pandemic caused a significant jump. However, this is also attributed to a growing police force without critical care training and a consequentially smaller budget for mental health services. Women and young adults have seen the most substantial increase in apprehensions as the most affected group by COVID-19. Mental Health hospitals across Canada have called for police removal when dealing with people in crisis [@remove]. It is crucial to invest in mental health services to decrease the number of apprehensions, but the City of Toronto is set on continuing to increase the Toronto Police budget yearly.
 
 
 \pagebreak
