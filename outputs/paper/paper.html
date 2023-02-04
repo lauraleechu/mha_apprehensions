@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Laura Lee-Chu">
+<meta name="dcterms.date" content="2023-02-04">
+
+<title>Under the Mental Health Act, Police Apprehensions Have Soared</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="paper_files/libs/clipboard/clipboard.min.js"></script>
+<script src="paper_files/libs/quarto-html/quarto.js"></script>
+<script src="paper_files/libs/quarto-html/popper.min.js"></script>
+<script src="paper_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="paper_files/libs/quarto-html/anchor.min.js"></script>
+<link href="paper_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="paper_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="paper_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="paper_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="paper_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<script src="paper_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="paper_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Under the Mental Health Act, Police Apprehensions Have Soared</h1>
+<p class="subtitle lead">Analyzing Mental Health Apprehensions in Toronto from 2014 to 2021</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Laura Lee-Chu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">4 February 2023</p>
+    </div>
+  </div>
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="abstract-title">Abstract</div>
+    This report discusses mental health apprehensions in Toronto using data from Open Data Toronto published by Toronto Police Services. The data shows an increase in apprehensions since 2014 with a steep incline from 2020 to 2021 within the context of COVID-19 and an inflated police budget
+  </div>
+</div>
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>1. Introduction</h1>
+<p>The uptick in crime and mental health disturbances across the City of Toronto has dramatically climbed in recent years. Mental health apprehensions have increased considerably since the beginning of the COVID-19 pandemic. Apprehensions are classified under the Ontario Mental Health Act (MHA), which sets out the powers and obligations of psychiatric facilities and outlines the powers of police officers to make orders for individuals to undergo psychiatric evaluation <span class="citation" data-cites="MHA">(<a href="#ref-MHA" role="doc-biblioref"><em>Mental Health Act, r.s.o. 1990, c. M.7</em> 2015</a>)</span>. The data shows that police are responsible for the majority of mental health apprehensions in Toronto. However, police are not trained in crisis care and have caused numerous deaths in attempts to de-escalate <span class="citation" data-cites="remove">(<a href="#ref-remove" role="doc-biblioref">Nasser 2020</a>)</span>. Despite this, the city has increased the Toronto Police Service (TPS) budget while mental health services have faced disruptions.</p>
+<p>Women and young adults have been disproportionately impacted by the pandemic and this is reflected in the rise of apprehensions in those groups. This paper will define the apprehension types under the MHA, discuss the number of mental health apprehensions in Toronto from 2014 to 2021, evaluate the role of police in context, and finally consider additional factors such as Sex and Age Group.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="data" class="level1">
+<h1>2. Data</h1>
+<p>This paper analyzed data obtained from the Open Data Toronto portal <span class="citation" data-cites="citeopendata">(<a href="#ref-citeopendata" role="doc-biblioref">Gelfand 2022</a>)</span> and was produced using the R statistical programming language <span class="citation" data-cites="citeR">(<a href="#ref-citeR" role="doc-biblioref">R Core Team 2022</a>)</span>. here was used to reference file locations <span class="citation" data-cites="here">(<a href="#ref-here" role="doc-biblioref">Müller 2020</a>)</span>. The data was examined and cleaned using the packages janitor <span class="citation" data-cites="janitor">(<a href="#ref-janitor" role="doc-biblioref">Firke 2021</a>)</span>, dplyr <span class="citation" data-cites="dplyr">(<a href="#ref-dplyr" role="doc-biblioref">Wickham et al. 2023</a>)</span>, and tidyverse <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham et al. 2019</a>)</span>. Tables were made knitr <span class="citation" data-cites="knitr">(<a href="#ref-knitr" role="doc-biblioref">Xie 2023</a>)</span> and formatted with kableExtra <span class="citation" data-cites="kableExtra">(<a href="#ref-kableExtra" role="doc-biblioref">Zhu 2021</a>)</span>. ggplot2 <span class="citation" data-cites="ggplot2">(<a href="#ref-ggplot2" role="doc-biblioref">Wickham 2016</a>)</span> was used to plot and scale the graphs.</p>
+<p>The selected data source presents statistical limitations. Each apprehension case was registered under a unique identification number. Therefore, individuals apprehended multiple times would be counted as separate cases. Additionally, the dataset does not include racial demographics, which limits the social discussion in context. The Toronto Police Service does not guarantee the accuracy, completeness, or timeliness of the data <span class="citation" data-cites="citeopendata">(<a href="#ref-citeopendata" role="doc-biblioref">Gelfand 2022</a>)</span>. Therefore, the analysis will not include apprehensions from 2022 onwards because the data set is incomplete. Furthermore, apprehensions without Sex or Age Group recordings will be excluded. This paper aims to discuss the ethical conflict of mental health apprehensions conducted by the City of Toronto and the TPS in particular.</p>
+<p>The following are the apprehension types pursuant to MHA sections:</p>
+<ul>
+<li><p>Section 15 (Form 1 - Physician - Application for Psychiatric Assessment)</p></li>
+<li><p>Section 16 (Form 2 – Justice of the Peace – Order for Examination)</p></li>
+<li><p>Section 17 (Police Officer’s Power of Apprehension)</p></li>
+<li><p>Section 28 (1) (Form 9 - Elopee - Order for Return)</p></li>
+<li><p>Section 33.4 (Form 47 - Community Treatment Order for Examination)</p></li>
+</ul>
+<p>While the overall number of mental health apprehensions shown in Table 1 has increased yearly, there was a 14.25% increase from 2020 to 2021, a drastic leap from the 4.83% increase from 2019 to 2020. To place the significant surge in situational context, the Coronavirus pandemic forced countries to impose restrictions. Toronto’s COVID-19 state of emergency was the longest for any major city in the world. The decline in mental health can be attributed to multiple stress factors resulting from prolonged social isolation, job loss, and changes in relationships. Fear of infection for oneself and loved ones, grief, and financial strain have also been cited as triggers for anxiety and depression <span class="citation" data-cites="WHO">(<a href="#ref-WHO" role="doc-biblioref"><em>COVID-19 Pandemic Triggers 25</em> 2022</a>)</span>. Additionally, restrictions disrupted existing mental health services and suicide prevention hotlines.</p>
+<div style="page-break-after: always;"></div>
+<div class="cell" data-messages="false" data-tab-cap="Table 1: Number of Apprehensions by MHA Apprehension Type from 2014 to 2021">
+<div class="cell-output-display">
+
+<table class=" lightable-classic" style="font-family: Cambria; margin-left: auto; margin-right: auto;">
+<caption>Number of Apprehensions by MHA Apprehension Type from 2014 to 2021</caption>
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="8"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Year</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;"> MHA Apprehension Types </th>
+   <th style="text-align:left;"> 2014 </th>
+   <th style="text-align:left;"> 2015 </th>
+   <th style="text-align:left;"> 2016 </th>
+   <th style="text-align:left;"> 2017 </th>
+   <th style="text-align:left;"> 2018 </th>
+   <th style="text-align:left;"> 2019 </th>
+   <th style="text-align:left;"> 2020 </th>
+   <th style="text-align:left;"> 2021 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Mha Sec 15 (Form 1) </td>
+   <td style="text-align:left;"> 806 </td>
+   <td style="text-align:left;"> 843 </td>
+   <td style="text-align:left;"> 884 </td>
+   <td style="text-align:left;"> 1001 </td>
+   <td style="text-align:left;"> 1017 </td>
+   <td style="text-align:left;"> 965 </td>
+   <td style="text-align:left;"> 870 </td>
+   <td style="text-align:left;"> 962 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mha Sec 16 (Form 2) </td>
+   <td style="text-align:left;"> 520 </td>
+   <td style="text-align:left;"> 574 </td>
+   <td style="text-align:left;"> 614 </td>
+   <td style="text-align:left;"> 819 </td>
+   <td style="text-align:left;"> 792 </td>
+   <td style="text-align:left;"> 870 </td>
+   <td style="text-align:left;"> 733 </td>
+   <td style="text-align:left;"> 801 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mha Sec 17 (Power Of App) </td>
+   <td style="text-align:left;"> 5764 </td>
+   <td style="text-align:left;"> 6379 </td>
+   <td style="text-align:left;"> 7064 </td>
+   <td style="text-align:left;"> 7440 </td>
+   <td style="text-align:left;"> 8177 </td>
+   <td style="text-align:left;"> 8645 </td>
+   <td style="text-align:left;"> 9418 </td>
+   <td style="text-align:left;"> 10955 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mha Sec 28(1) (Form 9 Elopee) </td>
+   <td style="text-align:left;"> 128 </td>
+   <td style="text-align:left;"> 140 </td>
+   <td style="text-align:left;"> 144 </td>
+   <td style="text-align:left;"> 167 </td>
+   <td style="text-align:left;"> 163 </td>
+   <td style="text-align:left;"> 221 </td>
+   <td style="text-align:left;"> 110 </td>
+   <td style="text-align:left;"> 79 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Mha Sec 33.4 (Form 47 Cto) </td>
+   <td style="text-align:left;"> 175 </td>
+   <td style="text-align:left;"> 228 </td>
+   <td style="text-align:left;"> 415 </td>
+   <td style="text-align:left;"> 390 </td>
+   <td style="text-align:left;"> 439 </td>
+   <td style="text-align:left;"> 467 </td>
+   <td style="text-align:left;"> 576 </td>
+   <td style="text-align:left;"> 578 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Total </td>
+   <td style="text-align:left;"> 7393 </td>
+   <td style="text-align:left;"> 8164 </td>
+   <td style="text-align:left;"> 9121 </td>
+   <td style="text-align:left;"> 9817 </td>
+   <td style="text-align:left;"> 10588 </td>
+   <td style="text-align:left;"> 11168 </td>
+   <td style="text-align:left;"> 11707 </td>
+   <td style="text-align:left;"> 13375 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>As shown in Table 1, there were significantly more apprehensions under Section 17 in all recorded years. Under the Ontario Mental Health Act, Section 17 is defined as:</p>
+<p>Where a police officer has reasonable and probable grounds to believe that a person is acting or has acted in a disorderly manner and has reasonable cause to believe that the person,</p>
+<ol type="a">
+<li><p>has threatened or attempted or is threatening or attempting to cause bodily harm to himself or herself;</p></li>
+<li><p>has behaved or is behaving violently towards another person or has caused or is causing another person to fear bodily harm from him or her; or</p></li>
+<li><p>has shown or is showing a lack of competence to care for himself or herself, and in addition the police officer is of the opinion that the person is apparently suffering from mental disorder of a nature or quality that likely will result in,</p></li>
+<li><p>serious bodily harm to the person;</p></li>
+<li><p>serious bodily harm to another person; or</p></li>
+<li><p>serious physical impairment of the person,</p></li>
+</ol>
+<p>and that it would be dangerous to proceed under section 16, the police officer may take the person in custody to an appropriate place for examination by a physician. <span class="citation" data-cites="MHA">(<a href="#ref-MHA" role="doc-biblioref"><em>Mental Health Act, r.s.o. 1990, c. M.7</em> 2015</a>)</span></p>
+<div class="cell" data-messages="false">
+<div class="cell-output-display">
+<div id="fig-1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="paper_files/figure-html/fig-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Number of Mental Health Apprehensions from 2014 to 2021</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 1 visualizes how Section 17 accounts for the vast majority of increases in apprehensions over time while the other Sections have remained relatively stable. From 2020 to 2021, Section 15, 16, and 33.4 saw a 10.57%, 9.28% and 0.35% increase respectively, while Section 28(1) apprehensions declined by 28.18%. In comparison, Section 17 apprehensions increased by 16.32% from 2020 to 2021. While the pandemic has caused an overall mental health decline, the disproportionate increase in police apprehensions can be attributed to the City of Toronto’s significant Police budget, which was $1.13 billion in 2021, slightly over 25% of taxpayer dollars <span class="citation" data-cites="polbudget">(<a href="#ref-polbudget" role="doc-biblioref">Jones 2022</a>)</span>. This amount is comparable to the tax dollars spent on public health, public transportation, the library, and children’s services combined. In 2021, Toronto spent just under 3.1 million on police services per day <span class="citation" data-cites="polbudget">(<a href="#ref-polbudget" role="doc-biblioref">Jones 2022</a>)</span>.</p>
+<div class="cell" data-messages="false" data-tab-cap="Table 2: Number of Mental Health Apprehensions by Age Group and Sex">
+<div class="cell-output-display">
+
+<table class=" lightable-minimal" style="font-size: 8px; font-family: Cambria; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">Number of Mental Health Apprehensions by Age Group and Sex</caption>
+ <thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1"></th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="8"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">Year</div></th>
+</tr>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:left;"> 2014 </th>
+   <th style="text-align:left;"> 2015 </th>
+   <th style="text-align:left;"> 2016 </th>
+   <th style="text-align:left;"> 2017 </th>
+   <th style="text-align:left;"> 2018 </th>
+   <th style="text-align:left;"> 2019 </th>
+   <th style="text-align:left;"> 2020 </th>
+   <th style="text-align:left;"> 2021 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr grouplength="6"><td colspan="9" style="border-bottom: 1px solid;"><strong>Age Group</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 65+ </td>
+   <td style="text-align:left;"> 631 </td>
+   <td style="text-align:left;"> 701 </td>
+   <td style="text-align:left;"> 664 </td>
+   <td style="text-align:left;"> 730 </td>
+   <td style="text-align:left;"> 787 </td>
+   <td style="text-align:left;"> 906 </td>
+   <td style="text-align:left;"> 847 </td>
+   <td style="text-align:left;"> 1001 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 55 to 64 </td>
+   <td style="text-align:left;"> 759 </td>
+   <td style="text-align:left;"> 848 </td>
+   <td style="text-align:left;"> 1020 </td>
+   <td style="text-align:left;"> 920 </td>
+   <td style="text-align:left;"> 1083 </td>
+   <td style="text-align:left;"> 1134 </td>
+   <td style="text-align:left;"> 1142 </td>
+   <td style="text-align:left;"> 1391 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 45 to 54 </td>
+   <td style="text-align:left;"> 1256 </td>
+   <td style="text-align:left;"> 1320 </td>
+   <td style="text-align:left;"> 1322 </td>
+   <td style="text-align:left;"> 1455 </td>
+   <td style="text-align:left;"> 1475 </td>
+   <td style="text-align:left;"> 1541 </td>
+   <td style="text-align:left;"> 1576 </td>
+   <td style="text-align:left;"> 1639 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 35 to 44 </td>
+   <td style="text-align:left;"> 1260 </td>
+   <td style="text-align:left;"> 1498 </td>
+   <td style="text-align:left;"> 1612 </td>
+   <td style="text-align:left;"> 1811 </td>
+   <td style="text-align:left;"> 1919 </td>
+   <td style="text-align:left;"> 2074 </td>
+   <td style="text-align:left;"> 2279 </td>
+   <td style="text-align:left;"> 2725 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 18 to 24 </td>
+   <td style="text-align:left;"> 1476 </td>
+   <td style="text-align:left;"> 1572 </td>
+   <td style="text-align:left;"> 1909 </td>
+   <td style="text-align:left;"> 2065 </td>
+   <td style="text-align:left;"> 2160 </td>
+   <td style="text-align:left;"> 2219 </td>
+   <td style="text-align:left;"> 2230 </td>
+   <td style="text-align:left;"> 2452 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> 25 to 34 </td>
+   <td style="text-align:left;"> 1781 </td>
+   <td style="text-align:left;"> 2114 </td>
+   <td style="text-align:left;"> 2482 </td>
+   <td style="text-align:left;"> 2729 </td>
+   <td style="text-align:left;"> 3072 </td>
+   <td style="text-align:left;"> 3154 </td>
+   <td style="text-align:left;"> 3508 </td>
+   <td style="text-align:left;"> 4046 </td>
+  </tr>
+  <tr grouplength="2"><td colspan="9" style="border-bottom: 1px solid;"><strong>Sex</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Female </td>
+   <td style="text-align:left;"> 3220 </td>
+   <td style="text-align:left;"> 3627 </td>
+   <td style="text-align:left;"> 3967 </td>
+   <td style="text-align:left;"> 4190 </td>
+   <td style="text-align:left;"> 4535 </td>
+   <td style="text-align:left;"> 4747 </td>
+   <td style="text-align:left;"> 4861 </td>
+   <td style="text-align:left;"> 5756 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Male </td>
+   <td style="text-align:left;"> 4165 </td>
+   <td style="text-align:left;"> 4536 </td>
+   <td style="text-align:left;"> 5154 </td>
+   <td style="text-align:left;"> 5621 </td>
+   <td style="text-align:left;"> 6043 </td>
+   <td style="text-align:left;"> 6417 </td>
+   <td style="text-align:left;"> 6835 </td>
+   <td style="text-align:left;"> 7606 </td>
+  </tr>
+  <tr grouplength="1"><td colspan="9" style="border-bottom: 1px solid;"><strong>Count</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> Total </td>
+   <td style="text-align:left;"> 7393 </td>
+   <td style="text-align:left;"> 8164 </td>
+   <td style="text-align:left;"> 9121 </td>
+   <td style="text-align:left;"> 9817 </td>
+   <td style="text-align:left;"> 10588 </td>
+   <td style="text-align:left;"> 11168 </td>
+   <td style="text-align:left;"> 11707 </td>
+   <td style="text-align:left;"> 13375 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<p>In contrast, Toronto allocated $2 million to strengthen mental health support in the same year, less than the TPS’ daily budget <span class="citation" data-cites="TOmental">(<a href="#ref-TOmental" role="doc-biblioref"><em>City of Toronto Strengthens Mental Health Support for Residents</em> 2021</a>)</span>. According to the World Health Organization, women have been more severely impacted by COVID-19 than men <span class="citation" data-cites="WHO">(<a href="#ref-WHO" role="doc-biblioref"><em>COVID-19 Pandemic Triggers 25</em> 2022</a>)</span>. When looking at the number of apprehensions from 2014 to 2021 in Table 2, males have consistently been apprehended at a higher rate. In 2021, there were 32.14% more male apprehensions. However, from 2020 to 2021, female apprehensions increased by 18.31% compared to an 11.28% rise in male apprehensions. Across all MHA Sections, as seen in Figure 2, males have been apprehended at a higher rate, particularly because of Section 17. There is limited information on gender disparities in policing in Canada. However, according to data from the FBI’s Uniform Crime Reporting Program, women make up 44% of police-initiated contact but only 27% of arrests <span class="citation" data-cites="FBI">(<a href="#ref-FBI" role="doc-biblioref">Initiative 2019</a>)</span>.</p>
+<div class="cell" data-messages="false">
+<div class="cell-output-display">
+<div id="fig-2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="paper_files/figure-html/fig-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Number of Apprehensions by Sex and MHA Apprehension Types</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="cell" data-messages="false">
+<div class="cell-output-display">
+<div id="fig-3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="paper_files/figure-html/fig-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Number of Mental Health Apprehensions by Age Group and MHA Apprehension Types</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When considering the ages of apprehended individuals, those 25 to 34 outnumbered all other age groups from 2014 to 2021 as seen in Table 2. However, when breaking down the numbers by MHA Sections, those aged 25 to 34 were on par with individuals aged 65+ in Section 15: Application of psychiatric assessment as seen in Figure 3. Across all other MHA Sections, numbers peaked at the 25 to 34 age group and gradually declined to 65+. According to Statistics Canada, higher proportions of young adults screened positive for anxiety and depression between the fall of 2020 and the spring of 2021. Among adults aged 25 to 44, major depressive disorder increased from 18% to 23% and generalized anxiety disorder increased from 15% to 20% in the aforementioned period. Proportions of positive screens were higher for younger age groups relative to older groups <span class="citation" data-cites="statscan">(<a href="#ref-statscan" role="doc-biblioref"><em>Symptoms of Mental Health Disorders over the Course of the COVID-19 Pandemic</em> 2021</a>)</span>.</p>
+<p>While Toronto has seen a rise in mental health apprehensions since 2014, the pandemic caused a significant jump. However, this is also attributed to a growing police force without critical care training and a consequentially smaller budget for mental health services. Women and young adults have seen the most substantial increase in apprehensions as the most affected group by COVID-19. Mental Health hospitals across Canada have called for police removal when dealing with people in crisis <span class="citation" data-cites="remove">(<a href="#ref-remove" role="doc-biblioref">Nasser 2020</a>)</span>. It is crucial to invest in mental health services to decrease the number of apprehensions, but the City of Toronto is set on continuing to increase the Toronto Police budget yearly.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="references" class="level1 unnumbered">
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-TOmental" class="csl-entry" role="doc-biblioentry">
+<em>City of Toronto Strengthens Mental Health Support for Residents</em>. 2021. City of Toronto.
+</div>
+<div id="ref-WHO" class="csl-entry" role="doc-biblioentry">
+<em>COVID-19 Pandemic Triggers 25</em>. 2022. World Health Organization.
+</div>
+<div id="ref-janitor" class="csl-entry" role="doc-biblioentry">
+Firke, Sam. 2021. <em>Janitor: Simple Tools for Examining and Cleaning Dirty Data</em>. <a href="https://github.com/sfirke/janitor">https://github.com/sfirke/janitor</a>.
+</div>
+<div id="ref-citeopendata" class="csl-entry" role="doc-biblioentry">
+Gelfand, Sharla. 2022. <em>Opendatatoronto: Access the City of Toronto Open Data Portal</em>. <a href="https://CRAN.R-project.org/package=opendatatoronto">https://CRAN.R-project.org/package=opendatatoronto</a>.
+</div>
+<div id="ref-FBI" class="csl-entry" role="doc-biblioentry">
+Initiative, Prison Policy. 2019. <em>Policing Women: Race and Gender Disparities in Police Stops, Searches, and Use of Force</em>. Prison Policy Initiative.
+</div>
+<div id="ref-polbudget" class="csl-entry" role="doc-biblioentry">
+Jones, Ryan Patrick. 2022. <em>The Police Budget Is One of Toronto’s Largest Expenses. Here’s What You Need to Know about It</em>. CBC News.
+</div>
+<div id="ref-MHA" class="csl-entry" role="doc-biblioentry">
+<em>Mental Health Act, r.s.o. 1990, c. M.7</em>. 2015.
+</div>
+<div id="ref-here" class="csl-entry" role="doc-biblioentry">
+Müller, Kirill. 2020. <em>Here: A Simpler Way to Find Your Files</em>.
+</div>
+<div id="ref-remove" class="csl-entry" role="doc-biblioentry">
+Nasser, Shafina. 2020. <em>Canada’s Largest Mental Health Hospital Calls for Removal of Police from Front Lines for People in Crisis</em>. CBC News.
+</div>
+<div id="ref-citeR" class="csl-entry" role="doc-biblioentry">
+R Core Team. 2022. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-statscan" class="csl-entry" role="doc-biblioentry">
+<em>Symptoms of Mental Health Disorders over the Course of the COVID-19 Pandemic</em>. 2021. Statistics Canada.
+</div>
+<div id="ref-ggplot2" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. <span>“Welcome to the <span class="nocase">tidyverse</span>.”</span> <em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.
+</div>
+<div id="ref-dplyr" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley, Romain François, Lionel Henry, Kirill Müller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>.
+</div>
+<div id="ref-knitr" class="csl-entry" role="doc-biblioentry">
+Xie, Yihui. 2023. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in r</em>. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
+</div>
+<div id="ref-kableExtra" class="csl-entry" role="doc-biblioentry">
+Zhu, Hao. 2021. <em>kableExtra: Construct Complex Table with ’Kable’ and Pipe Syntax</em>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

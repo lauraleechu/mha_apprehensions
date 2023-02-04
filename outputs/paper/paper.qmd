@@ -11,6 +11,13 @@ date-format: "D MMMM YYYY"
 bibliography: references.bib
 
 ---
+```{r setup, include=FALSE}
+#document set up for knit to pdf
+knitr::opts_chunk$set(echo=TRUE)
+
+```
+
+
 # 1. Introduction
 
 The uptick in crime and mental health disturbances across the City of Toronto has dramatically climbed in recent years. Mental health apprehensions have increased considerably since the beginning of the COVID-19 pandemic. Apprehensions are classified under the Ontario Mental Health Act (MHA), which sets out the powers and obligations of psychiatric facilities and outlines the powers of police officers to make orders for individuals to undergo psychiatric evaluation [@MHA]. The data shows that police are responsible for the majority of mental health apprehensions in Toronto. However, police are not trained in crisis care and have caused numerous deaths in attempts to de-escalate [@remove]. Despite this, the city has increased the Toronto Police Service (TPS) budget while mental health services have faced disruptions.
